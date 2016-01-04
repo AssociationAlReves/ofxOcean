@@ -1,0 +1,4 @@
+ofxGui
+ofxTween
+ofxVectorGraphics
+ofxXmlSettings
