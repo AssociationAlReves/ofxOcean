@@ -15,7 +15,7 @@ class ofxOcean {
     
 public:
     void setup();
-    void update();
+    void update(ofFloatColor const color);
     void draw();
     
     bool filled;

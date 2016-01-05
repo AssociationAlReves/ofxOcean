@@ -100,7 +100,7 @@ void ofxOcean::setupMesh(float W, float H, int gridSize){
 }
 
 //--------------------------------------------------------------
-void ofxOcean::update(){
+void ofxOcean::update(ofFloatColor const color){
 
     int W = width/gridSize;
     int H = height/gridSize;
@@ -113,12 +113,12 @@ void ofxOcean::update(){
             ofPoint p = mesh.getVertex( i );
             //Get Perlin noise value
             float value =
-            ofNoise( x * 0.05, y * 0.05, time * 0.2 );
+            ofNoise( x * 0.05, y * 0.05, time * 0.9 ); // 0.2
             //Change z-coordinate of vertex
-            p.z = value * 25;
+            p.z = value * 200; //25
             mesh.setVertex( i, p );
             //Change color of vertex
-            //mesh.setColor( i, ofColor( value*255, value * 255, 255 ));
+            mesh.setColor( i, color);
                     }
     }
     setNormals( mesh );  //Update the normals
@@ -131,6 +131,7 @@ void ofxOcean::draw(){
     
     ofPushMatrix();
     ofTranslate(-width/2, -height/2, -500);
+    ofTranslate(0,1000);
     
 //    mesh.setMode( OF_PRIMITIVE_TRIANGLES );
 //    vector<ofMeshFace> triangles = mesh.getUniqueFaces();

@@ -32,10 +32,20 @@ private:
     ofParameter<bool> useLights;
     ofParameter<bool> filled;
     ofParameter<bool> smoothLighting;
-    ofParameter<bool> shiny;
     ofParameter<bool> usePointLight;
     ofParameter<bool> useDirLight;
+    ofParameter<bool> useMaterial;
+    ofParameter<float> shininess;
     ofParameter<ofVec3f> dirLightOrientation;
+    ofParameter<ofFloatColor> diffuseColor;
+    ofParameter<ofFloatColor> specularColor;
+    ofParameter<ofFloatColor> ambientColor;
+    ofParameter<ofFloatColor> matAmbientColor;
+    ofParameter<ofFloatColor> matDiffuseColor;
+    ofParameter<ofFloatColor> matSpecularColor;
+    ofParameter<ofFloatColor> matEmissiveColor;
+    ofParameter<ofFloatColor> meshColor;
+    
     bool bShowGui;
     
     

@@ -30,7 +30,6 @@ void ofApp::setup(){
     directionalLight.setOrientation( ofVec3f(0, 90, 0) );
     
     
-    shiny = true;
     // shininess is a value between 0 - 128, 128 being the most shiny //
     material.setShininess( 120 );
     // the light highlight of the material //
@@ -43,10 +42,19 @@ void ofApp::setup(){
     gui.add(filled.set("bFill", true));
     gui.add(useLights.set("Use lights", false));
     gui.add(smoothLighting.set("Smooth Lighting", true));
-    gui.add(shiny.set("Shiny", true));
     gui.add(usePointLight.set("usePointLight", false));
     gui.add(useDirLight.set("useDirLight", false));
+    gui.add(useMaterial.set("useMaterial", false));
+    gui.add(shininess.set("shininess", 120, 0, 128));
     gui.add(dirLightOrientation.set("Orientation (x,z,y angles)", ofVec3f(0), ofVec3f(-180), ofVec3f(180)));
+    gui.add(meshColor.set("meshColor", ofColor(255.f, 255.f, 255.f),ofFloatColor(0,0,0,0),ofColor::white));
+    gui.add(diffuseColor.set("diffuseColor", ofColor(255.f, 255.f, 255.f),ofFloatColor(0,0,0,0),ofColor::white));
+    gui.add(specularColor.set("specularColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
+    gui.add(ambientColor.set("ambientColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
+    gui.add(matDiffuseColor.set("matDiffuseColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
+    gui.add(matSpecularColor.set("matSpecularColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
+    gui.add(matEmissiveColor.set("matEmissiveColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
+    gui.add(matAmbientColor.set("matAmbientColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
     bShowGui = true;
 }
 
@@ -59,12 +67,24 @@ void ofApp::update(){
                            -cos(ofGetElapsedTimef()*.8f) * radius * 2 + center.z);
     
     ocean.filled = filled;
-    if (shiny) material.setShininess( 120 );
-    else material.setShininess( 30 );
+    material.setShininess(shininess);
 
-    ocean.update();
+    ocean.update(meshColor);
     
+    directionalLight.setDiffuseColor(diffuseColor);
+    directionalLight.setSpecularColor(specularColor);
+    directionalLight.setAmbientColor(ambientColor);
+    
+    pointLight.setDiffuseColor(diffuseColor);
+    pointLight.setSpecularColor(specularColor);
+    pointLight.setAmbientColor(ambientColor);
+
+    directionalLight.setDirectional();
     directionalLight.setOrientation((ofVec3f)dirLightOrientation);
+    
+    material.setColors(matDiffuseColor, matAmbientColor, matSpecularColor, matEmissiveColor);
+    
+    
 }
 
 //--------------------------------------------------------------
@@ -72,12 +92,15 @@ void ofApp::draw(){
     
     
     cam.begin();
-    // enable lighting //
+    
+    // enable the material, so that it applies to all 3D objects before material.end() call //
+    if (useMaterial) {
+        material.begin();
+    }
+    
     if (useLights) {
         ofEnableLighting();
         ofSetSmoothLighting(smoothLighting);
-        // enable the material, so that it applies to all 3D objects before material.end() call //
-        material.begin();
         // activate the lights //
         if (usePointLight && useLights) pointLight.enable();
         if (useDirLight && useLights) directionalLight.enable();
@@ -85,22 +108,22 @@ void ofApp::draw(){
         ofDisableLighting();
     }
     
-    
-
+  
     ocean.draw();
     //ofDrawAxis(10);
     
     if (useLights) {
-        // enable the material, so that it applies to all 3D objects before material.end() call //
-        material.end();
         // activate the lights //
         if (!usePointLight) pointLight.disable();
         if (!useDirLight) directionalLight.disable();
     }
-    
+
+   
     // turn off lighting //
     ofDisableLighting();
-    
+    material.end();
+
+
     cam.end();
 
     if (bShowGui) {
@@ -118,6 +141,15 @@ void ofApp::keyPressed(int key){
     }
     if(key == 'l') {
         gui.loadFromFile("settings.xml");
+    }
+    if(key == 'f') {
+        ofToggleFullscreen();
+    }
+    if(key == OF_KEY_DOWN) {
+        cam.move(0,-10,0);
+    }
+    if(key == OF_KEY_UP) {
+        cam.move(0,10,0);
     }
 }
 
