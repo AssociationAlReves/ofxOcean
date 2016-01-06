@@ -13,15 +13,25 @@ void ofxOcean::setup(){
     
     width = 1000;
     height = 1000;
-    gridSize = 10;
+    resolution = 100;
+    gridSize = width / resolution;
     
     setupMesh(width,height,gridSize);
     
 }
 
 //--------------------------------------------------------------
+void ofxOcean::updateMesh(float W, float H, int res){
+    if (width != W || height != H || resolution != res) {
+        width = W; height = H; resolution = res; gridSize = W / res;
+        setupMesh(W, H, gridSize);
+    }
+}
+
+//--------------------------------------------------------------
 void ofxOcean::setupMesh(float W, float H, int gridSize){
     
+    mesh.clear();
     mesh.setMode(OF_PRIMITIVE_TRIANGLES);
     mesh.clear();
     mesh.enableColors();
@@ -78,29 +88,10 @@ void ofxOcean::setupMesh(float W, float H, int gridSize){
     }
     setNormals( mesh );  //Set normals
     
-//    //Set up vertices and colors
-//    for (int y=0; y<H; y++) {
-//        for (int x=0; x<W; x++) {
-//            mesh.addVertex(
-//                           ofPoint( (x - W/2) * gridSize, (y - H/2) * gridSize, 0 ) );
-//            mesh.addColor( ofColor( 0, 0, 0 ) );
-//        } }
-//    //Set up triangles' indices
-//    for (int y=0; y<H-1; y++) {
-//        for (int x=0; x<W-1; x++) {
-//            int i1 = x + W * y;
-//            int i2 = x+1 + W * y;
-//            int i3 = x + W * (y+1);
-//            int i4 = x+1 + W * (y+1);
-//            mesh.addTriangle( i1, i2, i3 );
-//            mesh.addTriangle( i2, i4, i3 );
-//        } }
-//    setNormals( mesh );  //Set normals
-//   
 }
 
 //--------------------------------------------------------------
-void ofxOcean::update(ofFloatColor const color){
+void ofxOcean::update(){
 
     int W = width/gridSize;
     int H = height/gridSize;
@@ -113,9 +104,9 @@ void ofxOcean::update(ofFloatColor const color){
             ofPoint p = mesh.getVertex( i );
             //Get Perlin noise value
             float value =
-            ofNoise( x * 0.05, y * 0.05, time * 0.9 ); // 0.2
+            ofNoise( x * gridSize * noiseAmp * 0.001, y * gridSize * noiseAmp * 0.001, time * noiseSpeed * 0.2 ); // 0.2
             //Change z-coordinate of vertex
-            p.z = value * 200; //25
+            p.z = value * noiseHeight; //25
             mesh.setVertex( i, p );
             //Change color of vertex
             mesh.setColor( i, color);

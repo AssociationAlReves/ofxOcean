@@ -36,15 +36,29 @@ private:
     ofParameter<bool> useDirLight;
     ofParameter<bool> useMaterial;
     ofParameter<float> shininess;
+
+    // lights params
     ofParameter<ofVec3f> dirLightOrientation;
     ofParameter<ofFloatColor> diffuseColor;
     ofParameter<ofFloatColor> specularColor;
     ofParameter<ofFloatColor> ambientColor;
+    ofParameterGroup lightParams;
+
+    // material params
     ofParameter<ofFloatColor> matAmbientColor;
     ofParameter<ofFloatColor> matDiffuseColor;
     ofParameter<ofFloatColor> matSpecularColor;
     ofParameter<ofFloatColor> matEmissiveColor;
+    ofParameterGroup materialParams;
+
+    // mesh params
     ofParameter<ofFloatColor> meshColor;
+    ofParameter<int> meshSize;
+    ofParameter<int> meshResolution;
+    ofParameter<float> noiseAmp;
+    ofParameter<float> noiseSpeed;
+    ofParameter<float> noiseHeight;
+    ofParameterGroup  meshParams;
     
     bool bShowGui;
     

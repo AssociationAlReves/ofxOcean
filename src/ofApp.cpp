@@ -5,7 +5,7 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     ofSetFrameRate(60);
     //ofBackground(10, 10, 10);
-    //ofEnableDepthTest();
+    
     
     // turn on smooth lighting //
     smoothLighting     = true;
@@ -13,48 +13,54 @@ void ofApp::setup(){
     
     // Point lights emit light in all directions //
     // set the diffuse color, color reflected from the light source //
-    pointLight.setDiffuseColor( ofColor(0.f, 255.f, 0.f));
-    
     // specular color, the highlight/shininess color //
-    pointLight.setSpecularColor( ofColor(255.f, 255.f, 0.f));
+    
     pointLight.setPointLight();
 
     // Directional Lights emit light based on their orientation, regardless of their position //
-    directionalLight.setDiffuseColor(ofColor(255.f, 255.f, 255.f));
-    directionalLight.setSpecularColor(ofColor(255.f, 255.f, 255.f));
-    directionalLight.setAmbientColor(ofColor(255.f, 255.f, 255.f));
     directionalLight.setDirectional();
     
     // set the direction of the light
     // set it pointing from left to right -> //
-    directionalLight.setOrientation( ofVec3f(0, 90, 0) );
-    
     
     // shininess is a value between 0 - 128, 128 being the most shiny //
-    material.setShininess( 120 );
+    material.setShininess(shininess);
     // the light highlight of the material //
-    material.setSpecularColor(ofColor(42, 141, 255, 128));
-    
+    material.setColors(matDiffuseColor, matAmbientColor, matSpecularColor, matEmissiveColor);
     
     ocean.setup();
     
     gui.setup("panel"); // most of the time you don't need a name but don't forget to call setup
     gui.add(filled.set("bFill", true));
-    gui.add(useLights.set("Use lights", false));
+    gui.add(useLights.set("Use lights", true));
     gui.add(smoothLighting.set("Smooth Lighting", true));
     gui.add(usePointLight.set("usePointLight", false));
-    gui.add(useDirLight.set("useDirLight", false));
-    gui.add(useMaterial.set("useMaterial", false));
-    gui.add(shininess.set("shininess", 120, 0, 128));
-    gui.add(dirLightOrientation.set("Orientation (x,z,y angles)", ofVec3f(0), ofVec3f(-180), ofVec3f(180)));
-    gui.add(meshColor.set("meshColor", ofColor(255.f, 255.f, 255.f),ofFloatColor(0,0,0,0),ofColor::white));
-    gui.add(diffuseColor.set("diffuseColor", ofColor(255.f, 255.f, 255.f),ofFloatColor(0,0,0,0),ofColor::white));
-    gui.add(specularColor.set("specularColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
-    gui.add(ambientColor.set("ambientColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
-    gui.add(matDiffuseColor.set("matDiffuseColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
-    gui.add(matSpecularColor.set("matSpecularColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
-    gui.add(matEmissiveColor.set("matEmissiveColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
-    gui.add(matAmbientColor.set("matAmbientColor", ofColor(255.f, 255.f, 255.f), ofFloatColor(0,0,0,0),ofColor::white));
+    gui.add(useDirLight.set("useDirLight", true));
+    gui.add(useMaterial.set("useMaterial", true));
+    
+    meshParams.setName("Ocean mesh");
+    meshParams.add(meshColor.set("meshColor", ofFloatColor(1, 0.72449, 1, 1),ofFloatColor(0,0,0,0),ofColor::white));
+    meshParams.add(meshSize.set("size", 1000, 10,10000));
+    meshParams.add(meshResolution.set("resolution", 2, 1,10));
+    meshParams.add(noiseAmp.set("noiseAmp", 2, 0,50));
+    meshParams.add(noiseSpeed.set("noiseSpeed", 2, 0,50));
+    meshParams.add(noiseHeight.set("noiseHeight", 2, 0,500));
+    gui.add(meshParams);
+    
+    lightParams.setName("Lights");
+    lightParams.add(dirLightOrientation.set("Orientation (x,z,y angles)", ofVec3f(180, -42.2449, 117.551), ofVec3f(-180), ofVec3f(180)));
+    lightParams.add(diffuseColor.set("diffuseColor", ofFloatColor(1, 1, 1, 1),ofFloatColor(0,0,0,0),ofColor::white));
+    lightParams.add(specularColor.set("specularColor", ofFloatColor(1, 1, 1, 1), ofFloatColor(0,0,0,0),ofColor::white));
+    lightParams.add(ambientColor.set("ambientColor", ofFloatColor(0, 0.00510204, 1, 1), ofFloatColor(0,0,0,0),ofColor::white));
+    gui.add(lightParams);
+    
+    materialParams.setName("Material");
+    materialParams.add(shininess.set("shininess", 128, 0, 128));
+    materialParams.add(matDiffuseColor.set("matDiffuseColor", ofFloatColor(0, 0.204082, 1, 1), ofFloatColor(0,0,0,0),ofColor::white));
+    materialParams.add(matSpecularColor.set("matSpecularColor", ofFloatColor(1, 1, 1, 1), ofFloatColor(0,0,0,0),ofColor::white));
+    materialParams.add(matEmissiveColor.set("matEmissiveColor", ofFloatColor(0, 0.540816, 1, 1), ofFloatColor(0,0,0,0),ofColor::white));
+    materialParams.add(matAmbientColor.set("matAmbientColor", ofFloatColor(0, 0.55102, 1, 1), ofFloatColor(0,0,0,0),ofColor::white));
+    gui.add(materialParams);
     bShowGui = true;
 }
 
@@ -67,9 +73,12 @@ void ofApp::update(){
                            -cos(ofGetElapsedTimef()*.8f) * radius * 2 + center.z);
     
     ocean.filled = filled;
-    material.setShininess(shininess);
-
-    ocean.update(meshColor);
+    
+    ocean.updateMesh(meshSize, meshSize, MAX(1, (int)meshResolution)*10);
+    ocean.noiseAmp = noiseAmp;
+    ocean.noiseHeight = noiseHeight;
+    ocean.noiseSpeed = noiseSpeed;
+    ocean.update();
     
     directionalLight.setDiffuseColor(diffuseColor);
     directionalLight.setSpecularColor(specularColor);
@@ -82,6 +91,7 @@ void ofApp::update(){
     directionalLight.setDirectional();
     directionalLight.setOrientation((ofVec3f)dirLightOrientation);
     
+    material.setShininess(shininess);
     material.setColors(matDiffuseColor, matAmbientColor, matSpecularColor, matEmissiveColor);
     
     
@@ -89,7 +99,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    
+    ofEnableDepthTest();
+    ofEnableAlphaBlending();
     
     cam.begin();
     
@@ -127,6 +138,7 @@ void ofApp::draw(){
     cam.end();
 
     if (bShowGui) {
+        ofDisableDepthTest();
         gui.draw();
     }
 }
