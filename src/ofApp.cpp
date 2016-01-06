@@ -40,11 +40,15 @@ void ofApp::setup(){
     
     meshParams.setName("Ocean mesh");
     meshParams.add(meshColor.set("meshColor", ofFloatColor(1, 0.72449, 1, 1),ofFloatColor(0,0,0,0),ofColor::white));
-    meshParams.add(meshSize.set("size", 1000, 10,10000));
+    meshParams.add(meshSize.set("size", 1000, 10,5000));
     meshParams.add(meshResolution.set("resolution", 2, 1,10));
     meshParams.add(noiseAmp.set("noiseAmp", 2, 0,50));
     meshParams.add(noiseSpeed.set("noiseSpeed", 2, 0,50));
     meshParams.add(noiseHeight.set("noiseHeight", 2, 0,500));
+    meshParams.add(waveAmp.set("waveAmp", 0,0,PI));
+    meshParams.add(waveSpeed.set("waveSpeed", 0,0,10));
+    meshParams.add(waveHeight.set("waveHeight", 0,0,100));
+    meshParams.add(waveDirection.set("waveDirection", ofVec3f(0),ofVec3f(0),ofVec3f(1)));
     gui.add(meshParams);
     
     lightParams.setName("Lights");
@@ -78,6 +82,10 @@ void ofApp::update(){
     ocean.noiseAmp = noiseAmp;
     ocean.noiseHeight = noiseHeight;
     ocean.noiseSpeed = noiseSpeed;
+    ocean.waveSpeed = waveSpeed;
+    ocean.waveHeight = waveHeight;
+    ocean.waveDirection = waveDirection;
+    ocean.waveAmplitude = waveAmp;
     ocean.update();
     
     directionalLight.setDiffuseColor(diffuseColor);
@@ -121,7 +129,7 @@ void ofApp::draw(){
     
   
     ocean.draw();
-    //ofDrawAxis(10);
+    //ofDrawAxis(1000);
     
     if (useLights) {
         // activate the lights //

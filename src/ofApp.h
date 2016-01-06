@@ -58,6 +58,11 @@ private:
     ofParameter<float> noiseAmp;
     ofParameter<float> noiseSpeed;
     ofParameter<float> noiseHeight;
+    
+    ofParameter<float> waveAmp;
+    ofParameter<float> waveSpeed;
+    ofParameter<float> waveHeight;
+    ofParameter<ofVec3f> waveDirection;
     ofParameterGroup  meshParams;
     
     bool bShowGui;

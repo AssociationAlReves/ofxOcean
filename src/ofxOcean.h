@@ -24,6 +24,11 @@ public:
     float noiseAmp;
     float noiseSpeed;
     float noiseHeight;
+    
+    ofVec3f waveDirection;
+    float waveHeight;
+    float waveAmplitude;
+    float waveSpeed;
 
 
 private:

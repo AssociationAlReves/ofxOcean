@@ -93,12 +93,16 @@ void ofxOcean::setupMesh(float W, float H, int gridSize){
 //--------------------------------------------------------------
 void ofxOcean::update(){
 
+    // z = sin(y)
+    
     int W = width/gridSize;
     int H = height/gridSize;
     float time = ofGetElapsedTimef();
     //Change vertices
     for (int y=0; y<H; y++) {
-        //Get time
+        
+        float waveZ = sin(y * waveAmplitude + time * waveSpeed) * waveHeight;
+        
         for (int x=0; x<W; x++) {
             int i = x + W * y;       //Vertex index
             ofPoint p = mesh.getVertex( i );
@@ -107,10 +111,14 @@ void ofxOcean::update(){
             ofNoise( x * gridSize * noiseAmp * 0.001, y * gridSize * noiseAmp * 0.001, time * noiseSpeed * 0.2 ); // 0.2
             //Change z-coordinate of vertex
             p.z = value * noiseHeight; //25
+        
+            p.z += waveZ;
+            
             mesh.setVertex( i, p );
             //Change color of vertex
             mesh.setColor( i, color);
                     }
+        
     }
     setNormals( mesh );  //Update the normals
     
