@@ -101,9 +101,12 @@ void ofxOcean::update(){
     //Change vertices
     for (int y=0; y<H; y++) {
         
-        float waveZ = sin(y * waveAmplitude + time * waveSpeed) * waveHeight;
+        //float waveZ = sin(y * waveAmplitude + time * waveSpeed) * waveHeight;
         
         for (int x=0; x<W; x++) {
+        
+            float waveZ = sin((y*waveDirection.y + x*waveDirection.x)  * waveAmplitude + time * waveSpeed) * waveHeight;
+            
             int i = x + W * y;       //Vertex index
             ofPoint p = mesh.getVertex( i );
             //Get Perlin noise value

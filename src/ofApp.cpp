@@ -40,14 +40,14 @@ void ofApp::setup(){
     
     meshParams.setName("Ocean mesh");
     meshParams.add(meshColor.set("meshColor", ofFloatColor(1, 0.72449, 1, 1),ofFloatColor(0,0,0,0),ofColor::white));
-    meshParams.add(meshSize.set("size", 1000, 10,5000));
+    meshParams.add(meshSize.set("size", 10, 10,100));
     meshParams.add(meshResolution.set("resolution", 2, 1,10));
     meshParams.add(noiseAmp.set("noiseAmp", 2, 0,50));
     meshParams.add(noiseSpeed.set("noiseSpeed", 2, 0,50));
     meshParams.add(noiseHeight.set("noiseHeight", 2, 0,500));
     meshParams.add(waveAmp.set("waveAmp", 0,0,PI));
     meshParams.add(waveSpeed.set("waveSpeed", 0,0,10));
-    meshParams.add(waveHeight.set("waveHeight", 0,0,100));
+    meshParams.add(waveHeight.set("waveHeight", 0,0,500));
     meshParams.add(waveDirection.set("waveDirection", ofVec3f(0),ofVec3f(0),ofVec3f(1)));
     gui.add(meshParams);
     
@@ -78,7 +78,7 @@ void ofApp::update(){
     
     ocean.filled = filled;
     
-    ocean.updateMesh(meshSize, meshSize, MAX(1, (int)meshResolution)*10);
+    ocean.updateMesh(meshSize*100, meshSize*100, MAX(1, (int)meshResolution)*10);
     ocean.noiseAmp = noiseAmp;
     ocean.noiseHeight = noiseHeight;
     ocean.noiseSpeed = noiseSpeed;
@@ -165,11 +165,19 @@ void ofApp::keyPressed(int key){
     if(key == 'f') {
         ofToggleFullscreen();
     }
-    if(key == OF_KEY_DOWN) {
+    if(key == 'o') {
+        cam.enableOrtho();    }
+    if(key == OF_KEY_LEFT) {
         cam.move(0,-10,0);
     }
-    if(key == OF_KEY_UP) {
+    if(key == OF_KEY_RIGHT) {
         cam.move(0,10,0);
+    }
+    if(key == OF_KEY_DOWN) {
+        cam.move(0,0,-10);
+    }
+    if(key == OF_KEY_UP) {
+        cam.move(0,0,10);
     }
 }
 
