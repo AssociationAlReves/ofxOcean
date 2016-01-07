@@ -63,6 +63,10 @@ private:
     ofParameter<float> waveSpeed;
     ofParameter<float> waveHeight;
     ofParameter<ofVec3f> waveDirection;
+    ofParameter<float> waveAmp2;
+    ofParameter<float> waveSpeed2;
+    ofParameter<float> waveHeight2;
+    ofParameter<ofVec3f> waveDirection2;
     ofParameterGroup  meshParams;
     
     bool bShowGui;

@@ -106,6 +106,7 @@ void ofxOcean::update(){
         for (int x=0; x<W; x++) {
         
             float waveZ = sin((y*waveDirection.y + x*waveDirection.x)  * waveAmplitude + time * waveSpeed) * waveHeight;
+            waveZ += sin((y*waveDirection2.y + x*waveDirection2.x)  * waveAmplitude2 + time * waveSpeed2) * waveHeight2;
             
             int i = x + W * y;       //Vertex index
             ofPoint p = mesh.getVertex( i );

@@ -29,6 +29,11 @@ public:
     float waveHeight;
     float waveAmplitude;
     float waveSpeed;
+    
+    ofVec3f waveDirection2;
+    float waveHeight2;
+    float waveAmplitude2;
+    float waveSpeed2;
 
 
 private:

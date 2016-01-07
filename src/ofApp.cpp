@@ -48,7 +48,12 @@ void ofApp::setup(){
     meshParams.add(waveAmp.set("waveAmp", 0,0,PI));
     meshParams.add(waveSpeed.set("waveSpeed", 0,0,10));
     meshParams.add(waveHeight.set("waveHeight", 0,0,500));
-    meshParams.add(waveDirection.set("waveDirection", ofVec3f(0),ofVec3f(0),ofVec3f(1)));
+    meshParams.add(waveDirection.set("waveDirection", ofVec3f(0),ofVec3f(-1),ofVec3f(1)));
+    meshParams.add(waveAmp2.set("waveAmp2", 0,0,PI));
+    meshParams.add(waveSpeed2.set("waveSpeed2", 0,0,10));
+    meshParams.add(waveHeight2.set("waveHeight2", 0,0,500));
+    meshParams.add(waveDirection2.set("waveDirection2", ofVec3f(0),ofVec3f(-1),ofVec3f(1)));
+
     gui.add(meshParams);
     
     lightParams.setName("Lights");
@@ -84,8 +89,13 @@ void ofApp::update(){
     ocean.noiseSpeed = noiseSpeed;
     ocean.waveSpeed = waveSpeed;
     ocean.waveHeight = waveHeight;
-    ocean.waveDirection = waveDirection;
+    ocean.waveDirection = ((ofVec3f)waveDirection).normalize();
     ocean.waveAmplitude = waveAmp;
+    ocean.waveSpeed2 = waveSpeed2;
+    ocean.waveHeight2 = waveHeight2;
+    ocean.waveDirection2 = ((ofVec3f)waveDirection2).normalize();
+    ocean.waveAmplitude2 = waveAmp2;
+
     ocean.update();
     
     directionalLight.setDiffuseColor(diffuseColor);
@@ -165,8 +175,6 @@ void ofApp::keyPressed(int key){
     if(key == 'f') {
         ofToggleFullscreen();
     }
-    if(key == 'o') {
-        cam.enableOrtho();    }
     if(key == OF_KEY_LEFT) {
         cam.move(0,-10,0);
     }
