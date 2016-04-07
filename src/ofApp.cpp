@@ -6,7 +6,6 @@ void ofApp::setup(){
     ofSetFrameRate(60);
     //ofBackground(10, 10, 10);
     
-    
     // turn on smooth lighting //
     smoothLighting     = true;
     ofSetSmoothLighting(true);
@@ -121,6 +120,7 @@ void ofApp::draw(){
     ofEnableAlphaBlending();
     
     cam.begin();
+    cam.setFarClip(100000);
     
     // enable the material, so that it applies to all 3D objects before material.end() call //
     if (useMaterial) {
