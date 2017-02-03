@@ -1,4 +1,2 @@
+ofxEasing
 ofxGui
-ofxTween
-ofxVectorGraphics
-ofxXmlSettings
